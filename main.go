@@ -12,8 +12,9 @@ var version = "dev"
 
 func main() {
 	if len(os.Args) < 2 {
-		// No subcommand: hook mode if stdin is a pipe, else help.
-		if isatty.IsTerminal(os.Stdin.Fd()) && !isatty.IsCygwinTerminal(os.Stdin.Fd()) {
+		// No subcommand: show help if stdout is a terminal (interactive),
+		// otherwise hook mode (stdout is piped to Claude Code).
+		if isatty.IsTerminal(os.Stdout.Fd()) || isatty.IsCygwinTerminal(os.Stdout.Fd()) {
 			cmd.Help(version)
 			return
 		}
