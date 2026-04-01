@@ -28,6 +28,7 @@ func Help(version string) {
 
 	b.WriteString(section("Setup"))
 	b.WriteString(row("init", "Install Claude Code SessionStart hook"))
+	b.WriteString(row("ignore [--local|--global]", "Add .codeindex to local or global gitignore"))
 	b.WriteString(row("update", "Update reckon to the latest release"))
 	b.WriteString(row("uninstall", "Remove hook and config"))
 	b.WriteString("\n")
@@ -35,6 +36,9 @@ func Help(version string) {
 	b.WriteString(section("Index"))
 	b.WriteString(row("index", "Rebuild .codeindex, print stats"))
 	b.WriteString(row("stats", "Show symbol count, file count, language breakdown"))
+	b.WriteString(row("exclude <pattern>", "Add a glob pattern to skip_patterns"))
+	b.WriteString(row("exclude --list", "Show all active skip patterns"))
+	b.WriteString(row("exclude --remove <pattern>", "Remove a user-defined skip pattern"))
 	b.WriteString("\n")
 
 	b.WriteString(section("Other"))

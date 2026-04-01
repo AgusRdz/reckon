@@ -2,6 +2,15 @@
 
 All notable changes to reckon are documented here.
 
+## [0.4.0] - 2026-04-01
+
+### Features
+- Add `reckon ignore [--local|--global]` command to add .codeindex to local or global gitignore
+- Add `gitignore: global` option to `.codeindex.yml` to use global gitignore automatically on index build
+- Add `reckon exclude <pattern>` command to add glob patterns to skip_patterns
+- Add `reckon exclude --list` to show all active skip patterns (defaults + user-defined)
+- Add `reckon exclude --remove <pattern>` to remove user-defined skip patterns
+
 ## [0.3.3] - 2026-04-01
 
 ### Bug Fixes

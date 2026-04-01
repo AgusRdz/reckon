@@ -32,6 +32,19 @@ func main() {
 		cmd.Init(version)
 	case "uninstall":
 		cmd.Uninstall(version)
+	case "ignore":
+		scope := ""
+		for _, arg := range os.Args[2:] {
+			switch arg {
+			case "--global":
+				scope = "global"
+			case "--local":
+				scope = "local"
+			}
+		}
+		cmd.Ignore(scope)
+	case "exclude":
+		cmd.Exclude(os.Args[2:])
 	default:
 		fmt.Fprintf(os.Stderr, "unknown command %q\nrun 'reckon help' for usage\n", os.Args[1])
 		os.Exit(1)
