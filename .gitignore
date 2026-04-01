@@ -1,0 +1,19 @@
+# Binary output
+bin/
+
+# Go
+*.test
+coverage.out
+coverage.html
+
+# Symbol index
+.codeindex
+
+# Config cache
+*.swp
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+*.iml
