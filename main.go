@@ -5,24 +5,19 @@ import (
 	"os"
 
 	"github.com/agusrdz/reckon/cmd"
-	"github.com/mattn/go-isatty"
 )
 
 var version = "dev"
 
 func main() {
 	if len(os.Args) < 2 {
-		// No subcommand: show help if stdout is a terminal (interactive),
-		// otherwise hook mode (stdout is piped to Claude Code).
-		if isatty.IsTerminal(os.Stdout.Fd()) || isatty.IsCygwinTerminal(os.Stdout.Fd()) {
-			cmd.Help(version)
-			return
-		}
-		cmd.Root(version)
+		cmd.Help(version)
 		return
 	}
 
 	switch os.Args[1] {
+	case "hook":
+		cmd.Root(version)
 	case "--help", "help", "-h":
 		cmd.Help(version)
 	case "--version", "version":

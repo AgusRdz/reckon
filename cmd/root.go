@@ -3,14 +3,11 @@ package cmd
 import (
 	"encoding/json"
 	"fmt"
-	"io"
 	"os"
 )
 
-// Root handles the SessionStart hook invocation.
+// Root handles the SessionStart hook invocation (reckon hook).
 func Root(version string) {
-	// SessionStart provides no meaningful stdin; consume and discard.
-	io.ReadAll(os.Stdin) //nolint:errcheck
 
 	cwd, err := os.Getwd()
 	if err != nil {

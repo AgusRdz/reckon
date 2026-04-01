@@ -62,7 +62,7 @@ func Install(version string) {
 		"hooks": []interface{}{
 			map[string]interface{}{
 				"type":    "command",
-				"command": exe,
+				"command": exe + " hook",
 			},
 		},
 	})
@@ -144,7 +144,7 @@ func GetHookCommand() string {
 				continue
 			}
 			cmd, _ := hm["command"].(string)
-			if strings.Contains(cmd, "reckon") {
+			if strings.Contains(cmd, "reckon") && strings.HasSuffix(cmd, " hook") {
 				return cmd
 			}
 		}
@@ -189,6 +189,7 @@ func removeOurEntries(entries []interface{}) []interface{} {
 			}
 			cmd, _ := hm["command"].(string)
 			if strings.Contains(cmd, "reckon") {
+				// match both old format ("reckon") and new ("reckon hook")
 				isOurs = true
 				break
 			}
