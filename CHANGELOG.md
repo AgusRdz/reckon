@@ -2,6 +2,11 @@
 
 All notable changes to reckon are documented here.
 
+## [0.3.2] - 2026-04-01
+
+### Bug Fixes
+- Use quoted forward-slash path format for hook command registration
+([7367fff](https://github.com/AgusRdz/reckon/commit/7367fffefe34b6f05f28f8c7a94858ef7512094a))
 ## [0.3.1] - 2026-04-01
 
 ### Bug Fixes
