@@ -45,6 +45,8 @@ func main() {
 		cmd.Ignore(scope)
 	case "exclude":
 		cmd.Exclude(os.Args[2:])
+	case "metrics":
+		cmd.Metrics(os.Args[2:])
 	default:
 		fmt.Fprintf(os.Stderr, "unknown command %q\nrun 'reckon help' for usage\n", os.Args[1])
 		os.Exit(1)

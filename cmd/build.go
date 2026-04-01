@@ -12,6 +12,7 @@ import (
 	"github.com/agusrdz/reckon/config"
 	"github.com/agusrdz/reckon/extract"
 	"github.com/agusrdz/reckon/index"
+	"github.com/agusrdz/reckon/metrics"
 	"github.com/agusrdz/reckon/walk"
 )
 
@@ -72,18 +73,19 @@ func BuildIndex(dir string) ([]extract.Symbol, BuildStats, error) {
 		}
 	}
 
-	if len(symbols) > 0 {
-		if err := index.Write(dir, symbols); err != nil {
-			return symbols, BuildStats{}, err
-		}
-		ensureGitignore(dir, cfg)
-	}
-
 	langs := make([]string, 0, len(langSet))
 	for l := range langSet {
 		langs = append(langs, l)
 	}
 	sort.Strings(langs)
+
+	if len(symbols) > 0 {
+		if err := index.Write(dir, symbols); err != nil {
+			return symbols, BuildStats{}, err
+		}
+		ensureGitignore(dir, cfg)
+		metrics.Record(dir, len(symbols), fileCount, langs)
+	}
 
 	return symbols, BuildStats{
 		Symbols:   len(symbols),

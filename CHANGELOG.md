@@ -2,6 +2,13 @@
 
 All notable changes to reckon are documented here.
 
+## [0.5.0] - 2026-04-01
+
+### Features
+- Add `reckon metrics` command: shows total builds, per-project build count, avg symbols, and last build time
+- Add `reckon metrics --clear` to wipe the usage log
+- Record a build event to `~/.config/reckon/usage.log` (JSONL) on every successful index build
+
 ## [0.4.0] - 2026-04-01
 
 ### Features

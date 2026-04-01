@@ -41,6 +41,11 @@ func Help(version string) {
 	b.WriteString(row("exclude --remove <pattern>", "Remove a user-defined skip pattern"))
 	b.WriteString("\n")
 
+	b.WriteString(section("Metrics"))
+	b.WriteString(row("metrics", "Show build history: total builds, per-project stats"))
+	b.WriteString(row("metrics --clear", "Clear the usage log"))
+	b.WriteString("\n")
+
 	b.WriteString(section("Other"))
 	b.WriteString(row("version", "Show version"))
 	b.WriteString(row("help", "Show this help"))
