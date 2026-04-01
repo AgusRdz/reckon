@@ -17,3 +17,8 @@ coverage.html
 .idea/
 .vscode/
 *.iml
+
+# Project meta (local only)
+.claude/
+CLAUDE.md
+PLAN.md
