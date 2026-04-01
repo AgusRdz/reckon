@@ -31,6 +31,8 @@ func main() {
 		cmd.Index()
 	case "stats":
 		cmd.Stats()
+	case "update":
+		cmd.Update(version)
 	case "init", "setup":
 		cmd.Init(version)
 	case "uninstall":

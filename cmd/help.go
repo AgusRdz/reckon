@@ -28,6 +28,7 @@ func Help(version string) {
 
 	b.WriteString(section("Setup"))
 	b.WriteString(row("init", "Install Claude Code SessionStart hook"))
+	b.WriteString(row("update", "Update reckon to the latest release"))
 	b.WriteString(row("uninstall", "Remove hook and config"))
 	b.WriteString("\n")
 
