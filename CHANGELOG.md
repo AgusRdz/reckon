@@ -2,6 +2,11 @@
 
 All notable changes to reckon are documented here.
 
+## [0.3.3] - 2026-04-01
+
+### Bug Fixes
+- Prepend reckon to SessionStart so it runs before ctx restore
+([187f73c](https://github.com/AgusRdz/reckon/commit/187f73c742c207c4f932d5b07469c8f338be516c))
 ## [0.3.2] - 2026-04-01
 
 ### Bug Fixes
