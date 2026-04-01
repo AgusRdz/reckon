@@ -7,43 +7,57 @@ import (
 	"time"
 )
 
-// Entry is one index-build event written to the usage log.
-type Entry struct {
-	Timestamp time.Time `json:"ts"`
-	Project   string    `json:"project"` // absolute path
-	Symbols   int       `json:"symbols"`
-	Files     int       `json:"files"`
-	Languages []string  `json:"languages"`
+const (
+	TypeBuild  = "build"
+	TypeSearch = "search"
+)
+
+// Result is one symbol match from a search.
+type Result struct {
+	Symbol string `json:"symbol"`
+	File   string `json:"file"`
+	Line   int    `json:"line"`
+	Kind   string `json:"kind"`
 }
 
-// Record appends one build event to the usage log.
-// Failures are silently ignored — metrics must never break the main flow.
-func Record(project string, symbols, files int, languages []string) {
-	path, err := logPath()
-	if err != nil {
-		return
-	}
-	if err := os.MkdirAll(filepath.Dir(path), 0755); err != nil {
-		return
-	}
-	f, err := os.OpenFile(path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {
-		return
-	}
-	defer f.Close()
+// Entry is one event written to the usage log.
+// Type is either "build" or "search"; unused fields are omitted.
+type Entry struct {
+	Type      string    `json:"type"`
+	Timestamp time.Time `json:"ts"`
+	Project   string    `json:"project"`
+	// build fields
+	Symbols   int      `json:"symbols,omitempty"`
+	Files     int      `json:"files,omitempty"`
+	Languages []string `json:"languages,omitempty"`
+	// search fields
+	Query   string   `json:"query,omitempty"`
+	Hits    int      `json:"hits,omitempty"`
+	Results []Result `json:"results,omitempty"`
+}
 
-	entry := Entry{
+// RecordBuild appends a build event to the usage log.
+func RecordBuild(project string, symbols, files int, languages []string) {
+	write(Entry{
+		Type:      TypeBuild,
 		Timestamp: time.Now().UTC(),
 		Project:   project,
 		Symbols:   symbols,
 		Files:     files,
 		Languages: languages,
-	}
-	data, err := json.Marshal(entry)
-	if err != nil {
-		return
-	}
-	f.Write(append(data, '\n'))
+	})
+}
+
+// RecordSearch appends a search event to the usage log.
+func RecordSearch(project, query string, results []Result) {
+	write(Entry{
+		Type:      TypeSearch,
+		Timestamp: time.Now().UTC(),
+		Project:   project,
+		Query:     query,
+		Hits:      len(results),
+		Results:   results,
+	})
 }
 
 // ReadAll returns all entries from the usage log, oldest first.
@@ -67,6 +81,10 @@ func ReadAll() ([]Entry, error) {
 		}
 		var e Entry
 		if json.Unmarshal(line, &e) == nil {
+			// back-compat: entries written before type field default to build
+			if e.Type == "" {
+				e.Type = TypeBuild
+			}
 			entries = append(entries, e)
 		}
 	}
@@ -84,6 +102,27 @@ func Clear() error {
 		return nil
 	}
 	return err
+}
+
+func write(e Entry) {
+	// Failures are silently ignored — metrics must never break the main flow.
+	path, err := logPath()
+	if err != nil {
+		return
+	}
+	if err := os.MkdirAll(filepath.Dir(path), 0755); err != nil {
+		return
+	}
+	f, err := os.OpenFile(path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		return
+	}
+	defer f.Close()
+	data, err := json.Marshal(e)
+	if err != nil {
+		return
+	}
+	f.Write(append(data, '\n'))
 }
 
 func logPath() (string, error) {

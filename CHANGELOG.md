@@ -2,6 +2,17 @@
 
 All notable changes to reckon are documented here.
 
+## [0.6.0] - 2026-04-01
+
+### Features
+- Add `reckon search <pattern>` command: case-insensitive symbol lookup with full metrics logging
+- SessionStart hint now instructs Claude to use `reckon search` instead of grepping `.codeindex` directly
+- Search events logged to `~/.config/reckon/usage.log` with query, hit count, and matched symbols
+- `reckon metrics` now shows search stats: total searches, hit rate, top queries, per-project breakdown
+
+### Breaking Changes
+- `metrics.Record` renamed to `metrics.RecordBuild`; existing log entries without a `type` field are treated as builds
+
 ## [0.5.0] - 2026-04-01
 
 ### Features

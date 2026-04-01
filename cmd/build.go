@@ -84,7 +84,7 @@ func BuildIndex(dir string) ([]extract.Symbol, BuildStats, error) {
 			return symbols, BuildStats{}, err
 		}
 		ensureGitignore(dir, cfg)
-		metrics.Record(dir, len(symbols), fileCount, langs)
+		metrics.RecordBuild(dir, len(symbols), fileCount, langs)
 	}
 
 	return symbols, BuildStats{

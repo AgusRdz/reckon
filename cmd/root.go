@@ -22,7 +22,7 @@ func Root(version string) {
 	}
 
 	msg := fmt.Sprintf(
-		"Symbol index rebuilt: .codeindex — %s symbols across %s files.\nGrep .codeindex before searching the codebase. If not found there, search normally.",
+		"Symbol index rebuilt: .codeindex — %s symbols across %s files.\nRun `reckon search <pattern>` to look up any symbol before searching the codebase. If not found, search normally.",
 		formatNum(stats.Symbols),
 		formatNum(stats.Files),
 	)

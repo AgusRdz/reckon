@@ -35,6 +35,7 @@ func Help(version string) {
 
 	b.WriteString(section("Index"))
 	b.WriteString(row("index", "Rebuild .codeindex, print stats"))
+	b.WriteString(row("search <pattern>", "Search .codeindex for a symbol (logged for metrics)"))
 	b.WriteString(row("stats", "Show symbol count, file count, language breakdown"))
 	b.WriteString(row("exclude <pattern>", "Add a glob pattern to skip_patterns"))
 	b.WriteString(row("exclude --list", "Show all active skip patterns"))
