@@ -2,6 +2,11 @@
 
 All notable changes to reckon are documented here.
 
+## [0.3.0] - 2026-04-01
+
+### Features
+- Add reckon update command
+([d5ad574](https://github.com/AgusRdz/reckon/commit/d5ad5742935e816a702941aa8a69edb711845491))
 ## [0.2.0] - 2026-04-01
 
 ### Bug Fixes
