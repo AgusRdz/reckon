@@ -9,20 +9,25 @@ When Claude needs to find a function, class, or method, it normally greps across
 ### macOS / Linux
 
 ```bash
-curl -fsSL https://github.com/AgusRdz/reckon/releases/latest/download/reckon-$(uname -s | tr '[:upper:]' '[:lower:]')-$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/') -o /usr/local/bin/reckon
-chmod +x /usr/local/bin/reckon
-reckon init
+curl -fsSL https://raw.githubusercontent.com/AgusRdz/reckon/main/install.sh | sh
 ```
 
 ### Windows (PowerShell)
 
 ```powershell
-$dest = "$env:LOCALAPPDATA\Programs\reckon"
-New-Item -ItemType Directory -Force -Path $dest | Out-Null
-Invoke-WebRequest -Uri "https://github.com/AgusRdz/reckon/releases/latest/download/reckon-windows-amd64.exe" -OutFile "$dest\reckon.exe"
-$env:PATH = "$dest;$env:PATH"
-[System.Environment]::SetEnvironmentVariable("PATH", "$dest;" + [System.Environment]::GetEnvironmentVariable("PATH", "User"), "User")
-reckon init
+irm https://raw.githubusercontent.com/AgusRdz/reckon/main/install.ps1 | iex
+```
+
+Both scripts download the binary, add it to `PATH`, and run `reckon init` to register the Claude Code hook automatically.
+
+To override the install directory:
+
+```bash
+RECKON_INSTALL_DIR=/usr/local/bin curl -fsSL https://raw.githubusercontent.com/AgusRdz/reckon/main/install.sh | sh
+```
+
+```powershell
+$env:RECKON_INSTALL_DIR = "C:\tools\reckon"; irm https://raw.githubusercontent.com/AgusRdz/reckon/main/install.ps1 | iex
 ```
 
 ### Build from source
@@ -36,7 +41,7 @@ reckon init
 
 ## Hook registration
 
-`reckon init` (included in all install steps above) registers the SessionStart hook — no manual config needed. It writes the hook entry to `~/.claude/settings.json`:
+`reckon init` (run automatically by the install scripts) registers the SessionStart hook — no manual config needed. It writes the hook entry to `~/.claude/settings.json`:
 
 ```json
 {
