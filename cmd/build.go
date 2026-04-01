@@ -74,6 +74,7 @@ func BuildIndex(dir string) ([]extract.Symbol, BuildStats, error) {
 		if err := index.Write(dir, symbols); err != nil {
 			return symbols, BuildStats{}, err
 		}
+		ensureGitignore(dir)
 	}
 
 	langs := make([]string, 0, len(langSet))
@@ -87,6 +88,37 @@ func BuildIndex(dir string) ([]extract.Symbol, BuildStats, error) {
 		Files:     fileCount,
 		Languages: langs,
 	}, nil
+}
+
+// ensureGitignore adds .codeindex to the project's .gitignore if not already present.
+func ensureGitignore(dir string) {
+	path := filepath.Join(dir, ".gitignore")
+	entry := index.Filename
+
+	data, err := os.ReadFile(path)
+	if err == nil {
+		// File exists — check if entry is already there
+		for _, line := range strings.Split(string(data), "\n") {
+			if strings.TrimSpace(line) == entry {
+				return
+			}
+		}
+		// Append with a trailing newline
+		f, err := os.OpenFile(path, os.O_APPEND|os.O_WRONLY, 0644)
+		if err != nil {
+			return
+		}
+		defer f.Close()
+		// Ensure we start on a new line
+		suffix := ""
+		if len(data) > 0 && data[len(data)-1] != '\n' {
+			suffix = "\n"
+		}
+		fmt.Fprintf(f, "%s%s\n", suffix, entry)
+	} else if os.IsNotExist(err) {
+		// No .gitignore — create one
+		os.WriteFile(path, []byte(entry+"\n"), 0644)
+	}
 }
 
 func extToLang(ext string) string {
