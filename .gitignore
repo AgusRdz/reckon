@@ -22,3 +22,6 @@ coverage.html
 .claude/
 CLAUDE.md
 PLAN.md
+
+# Private keys
+signing.pem
