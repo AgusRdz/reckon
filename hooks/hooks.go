@@ -58,16 +58,18 @@ func Install(version string) {
 	sessionStart := getOrCreateSlice(hooksMap, "SessionStart")
 	sessionStart = removeOurEntries(sessionStart)
 
-	// Use forward slashes and quoted path to match Claude Code's expected format
+	// Use forward slashes and quoted path to match Claude Code's expected format.
+	// Prepend so reckon runs before ctx restore — index must be injected first.
 	exeFwd := strings.ReplaceAll(exe, "\\", "/")
-	sessionStart = append(sessionStart, map[string]interface{}{
+	entry := map[string]interface{}{
 		"hooks": []interface{}{
 			map[string]interface{}{
 				"type":    "command",
 				"command": fmt.Sprintf("%q hook", exeFwd),
 			},
 		},
-	})
+	}
+	sessionStart = append([]interface{}{entry}, sessionStart...)
 
 	hooksMap["SessionStart"] = sessionStart
 	settings["hooks"] = hooksMap
