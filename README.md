@@ -11,30 +11,32 @@ When Claude needs to find a function, class, or method, it normally greps across
 ```bash
 curl -fsSL https://github.com/AgusRdz/reckon/releases/latest/download/reckon-$(uname -s | tr '[:upper:]' '[:lower:]')-$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/') -o /usr/local/bin/reckon
 chmod +x /usr/local/bin/reckon
+reckon init
 ```
 
-### Windows
+### Windows (PowerShell)
 
-Download `reckon-windows-amd64.exe` from the [latest release](https://github.com/AgusRdz/reckon/releases/latest), rename it to `reckon.exe`, and place it somewhere on your `PATH` (e.g. `%LOCALAPPDATA%\Programs\reckon\`).
+```powershell
+$dest = "$env:LOCALAPPDATA\Programs\reckon"
+New-Item -ItemType Directory -Force -Path $dest | Out-Null
+Invoke-WebRequest -Uri "https://github.com/AgusRdz/reckon/releases/latest/download/reckon-windows-amd64.exe" -OutFile "$dest\reckon.exe"
+$env:PATH = "$dest;$env:PATH"
+[System.Environment]::SetEnvironmentVariable("PATH", "$dest;" + [System.Environment]::GetEnvironmentVariable("PATH", "User"), "User")
+reckon init
+```
 
 ### Build from source
 
 ```bash
 git clone https://github.com/AgusRdz/reckon.git
 cd reckon
-make build         # produces bin/reckon
-make install       # builds and copies to ~/.local/bin (Linux/macOS) or %LOCALAPPDATA%\Programs\reckon (Windows)
+make install    # builds and copies to ~/.local/bin (Linux/macOS) or %LOCALAPPDATA%\Programs\reckon (Windows)
+reckon init
 ```
 
 ## Hook registration
 
-After installing the binary, register the SessionStart hook:
-
-```bash
-reckon init
-```
-
-This writes the hook entry to `~/.claude/settings.json`:
+`reckon init` (included in all install steps above) registers the SessionStart hook — no manual config needed. It writes the hook entry to `~/.claude/settings.json`:
 
 ```json
 {
