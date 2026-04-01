@@ -2,6 +2,11 @@
 
 All notable changes to reckon are documented here.
 
+## [0.3.1] - 2026-04-01
+
+### Bug Fixes
+- Use dedicated 'hook' subcommand for SessionStart, drop TTY detection
+([de4e07a](https://github.com/AgusRdz/reckon/commit/de4e07a622a1588676405460cf563539dbd827c9))
 ## [0.3.0] - 2026-04-01
 
 ### Features
