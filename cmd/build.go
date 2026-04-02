@@ -95,13 +95,36 @@ func BuildIndex(dir string) ([]extract.Symbol, BuildStats, error) {
 }
 
 // ensureGitignore adds .codeindex to either the local or global .gitignore.
+// If .codeindex is already covered by the global gitignore, the local file is left untouched.
 func ensureGitignore(dir string, cfg *config.Config) {
 	if cfg.Gitignore == "global" {
 		ensureGlobalGitignore()
 		removeFromLocalGitignore(dir)
 	} else {
+		if isGloballyIgnored() {
+			return
+		}
 		ensureLocalGitignore(dir)
 	}
+}
+
+// isGloballyIgnored reports whether .codeindex is already listed in the global gitignore.
+func isGloballyIgnored() bool {
+	path := globalGitignorePath()
+	if path == "" {
+		return false
+	}
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return false
+	}
+	entry := index.Filename
+	for _, line := range strings.Split(string(data), "\n") {
+		if strings.TrimSpace(line) == entry {
+			return true
+		}
+	}
+	return false
 }
 
 // ensureLocalGitignore adds .codeindex to the project's .gitignore.
